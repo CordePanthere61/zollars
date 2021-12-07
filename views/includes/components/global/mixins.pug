@@ -1,0 +1,12 @@
+
+mixin flash
+  if (typeof(errorMessages) !== 'undefined') && errorMessages.length
+    .alert.alert-danger
+      each error in errorMessages
+        | - #{error.message ? error.message : error}
+        br
+  if locals.successMessages && successMessages.length
+      .alert.alert-success
+        each success in successMessages
+          | - #{success}
+          br

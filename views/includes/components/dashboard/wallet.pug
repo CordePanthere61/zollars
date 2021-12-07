@@ -1,0 +1,52 @@
+.card
+  .card-body.pb-0
+    h5.card-title.color-text
+      | Portefeuille&nbsp;
+      span
+        a(href='/wallets') | &nbsp;Voir plus
+    #walletChart.echart.color-text(style='min-height: 277px;')
+    script.
+      document.addEventListener("DOMContentLoaded", () => {
+        echarts.init(document.querySelector("#walletChart")).setOption({
+          tooltip: {
+            trigger: 'item'
+          },
+          legend: {
+            orient: 'horizontal',
+          },
+          series: [
+            {
+              name: 'Portefeuille',
+              type: 'pie',
+              radius: '50%',
+              data: [
+              {
+                value: 1048,
+                name: 'BTC'
+              },
+              {
+                value: 735,
+                name: 'ADA'
+              },
+              {
+                value: 580,
+                name: 'SHIB'
+              }],
+              emphasis: {
+                itemStyle: {
+                  color: '#FAFAFA',
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(255, 255, 255, 0.5)'
+                }
+              }
+            }],
+            options: {
+              legend: {
+                  labels: {
+                      fontColor: 'white'
+                  }
+              }
+            }
+        });
+      });

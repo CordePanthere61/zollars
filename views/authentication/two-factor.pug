@@ -1,0 +1,27 @@
+extends ../includes/layouts/auth-layout
+
+block content
+  .p-3.text-center
+    if errors != null
+      .alert.alert-danger
+          each error in errors
+            | - #{error.message}
+            br
+    h5.card-title.fs-4.color-text-accent Two-Factor Authentication
+    span.small
+      | A code has been sent to :&nbsp;
+      if user.phone.length === 11
+        | +#{user.phone.charAt(0)} (#{user.phone.substring(1, 4)}) #{user.phone.substring(4, 7)}-#{user.phone.substring(7)}
+      else
+        | (#{user.phone.substring(0, 3)}) #{user.phone.substring(3, 6)}-#{user.phone.substring(6)}
+  form.row.g-3.needs-validation(action='/login/two-factor/validate' method='POST')
+    .col-12
+      label.form-label(for='code') Code
+      input#code.form-control(type='text' name='code' required)
+    .col-6.py-3
+      button.btn.btn-warning.w-100
+        a.text-black(href='/login')
+          i.bi.bi-arrow-left
+          | &nbsp;Cancel
+    .col-6.py-3
+      button.btn.btn-warning.w-100(type='submit') Confirm

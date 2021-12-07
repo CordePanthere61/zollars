@@ -1,0 +1,9 @@
+extends dependecies
+include ../components/global/mixins
+
+block layout
+  include ../components/global/header
+  include ../components/global/sidebar
+  main#main.main
+    +flash
+    block content

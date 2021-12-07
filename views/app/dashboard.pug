@@ -1,0 +1,10 @@
+extends ../includes/layouts/app-layout
+
+block content
+  .pagetitle
+    h1=title
+  .row.py-4
+    .col-lg-8
+      include ../includes/components/dashboard/transaction-history
+    .col-lg-4
+      include ../includes/components/dashboard/wallet

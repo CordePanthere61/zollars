@@ -1,0 +1,25 @@
+extends ../includes/layouts/auth-layout
+
+block content
+  .pt-4.pb-2
+    +flash
+    h5.card-title.text-center.pb-0.fs-4.color-text-accent Log in to Zollars
+  form.row.g-3.needs-validation(action='/login' method='POST')
+    .col-12
+      label.form-label(for='email') Email
+      .input-group.has-validation
+        span#inputGroupPrepend.input-group-text @
+        input#email.form-control(type='text' name='email' required)
+    .col-12
+      label.form-label(for='password') Password
+      input#password.form-control(type='password' name='password' required)
+    .col-12
+      .form-check
+        input#rememberMe.form-check-input(type='checkbox' name='remember_me' value='true')
+        label.form-check-label(for='rememberMe') Remember me
+    .col-12
+      button.btn.btn-warning.w-100(type='submit') Log in
+    .col-12
+      p.small.mb-0
+        | Don't have an account yet ?
+        a(href='/register') &nbsp;Register

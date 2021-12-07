@@ -1,0 +1,24 @@
+extends ../includes/layouts/app-layout
+
+block content
+  .container
+    section.section.register.min-vh-80.d-flex.flex-column.align-items-center.justify-content-center.py-4
+      .container
+        .row.justify-content-center
+          .col-lg-12.col-md-12.d-flex.flex-column.align-items-center.justify-content-center
+            .card.mb-3.p-3
+              .card-body.p-4
+                .pt-4.pb-2.text-center
+                  h5.card-title.fs-4.color-text-accent Phone confirmation
+                  span.small
+                    | A code has been sent to :&nbsp;
+                    if user.phone.length === 11
+                      | +#{user.phone.charAt(0)} (#{user.phone.substring(1, 4)}) #{user.phone.substring(4, 7)}-#{user.phone.substring(7)}
+                    else
+                    | (#{user.phone.substring(0, 3)}) #{user.phone.substring(3, 6)}-#{user.phone.substring(6)}
+                form.row.py-4.g-3.needs-validation(action='/profile/confirm-phone/validate' method='POST')
+                  .col-12
+                    label.form-label(for='code') Code
+                    input#code.form-control(type='text' name='code' required)
+                  .col-12.py-3
+                    button.btn.btn-warning.w-100(type='submit') Confirm

@@ -1,0 +1,32 @@
+extends ../includes/layouts/auth-layout
+
+block content
+  .pt-4.pb-2
+    +flash
+    h5.card-title.text-center.pb-0.fs-4 Register
+  form.row.g-3.needs-validation(novalidate action='/register' method='POST')
+    .col-6
+      label.form-label(for='firstname') First name
+      input#firstname.form-control(type='text' name='firstname' placeholder='Bruce' required)
+    .col-6
+      label.form-label(for='lastname') Last name
+      input#lastname.form-control(type='text' name='lastname' placeholder='Wayne' required)
+    .col-12
+      label.form-label(for='email') Email
+      .input-group.has-validation
+        span#inputGroupPrepend.input-group-text @
+        input#email.form-control(type='email' name='email' placeholder='xyz@example.com' required)
+    .col-12
+      label.form-label(for='password') Password&nbsp;
+        i(data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Minimum 8 characters. Minimum 1 uppercase letter. Minimum 1 number.").bi.bi-info-circle
+      input#password.form-control(type='password' name='password' placeholder='********' required)
+    .col-12
+      label.form-label(for='phone') Phone&nbsp;
+        i(data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Minimum 10 characters. Maximum 11 characters.").bi.bi-info-circle
+      input#phone.form-control(type='tel' name='phone' placeholder='(###) ###-####' required)
+    .col-12
+      button.btn.btn-warning.w-100(type='submit') Create Account
+    .col-12
+      p.small.mb-0
+        | Already have an account ?
+        a(href='/login') &nbspLogin

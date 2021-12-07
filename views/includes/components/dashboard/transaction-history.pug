@@ -1,0 +1,61 @@
+.col-12
+  .card.recent-transactions
+    .card-body.color-text
+      h5.card-title.color-text
+        | Historique des transactions&nbsp;
+        span
+          a(href='/transaction-history') | &nbsp;Voir plus
+      table.table.table-borderless.color-text
+        thead
+          tr
+            th(scope='col') #
+            th(scope='col') Customer
+            th(scope='col') Product
+            th(scope='col') Price
+            th(scope='col') Status
+        tbody
+          tr
+            th(scope='row')
+              | #2457
+            td Brandon Jacob
+            td
+              | At praesentium minu
+            td $64
+            td
+              span.badge.bg-success Approved
+          tr
+            th(scope='row')
+              | #2147
+            td Bridie Kessler
+            td
+              | Blanditiis dolor omnis similique
+            td $47
+            td
+              span.badge.bg-warning Pending
+          tr
+            th(scope='row')
+              | #2049
+            td Ashleigh Langosh
+            td
+              | At recusandae consectetur
+            td $147
+            td
+              span.badge.bg-success Approved
+          tr
+            th(scope='row')
+              | #2644
+            td Angus Grady
+            td
+              | Ut voluptatem id earum et
+            td $67
+            td
+              span.badge.bg-danger Rejected
+          tr
+            th(scope='row')
+              | #2644
+            td Raheem Lehner
+            td
+              | Sunt similique distinctio
+            td $165
+            td
+              span.badge.bg-success Approved

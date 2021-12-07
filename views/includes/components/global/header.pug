@@ -1,0 +1,32 @@
+header#header.header.fixed-top.d-flex.align-items-center
+  .d-flex.align-items-center.justify-content-between
+    a.logo.d-flex.align-items-center(href='/')
+      img(src='/img/logo_small.png' alt='logo')
+      span.d-none.d-lg-block Zollars
+    i.bi.bi-list.toggle-sidebar-btn
+  nav.header-nav.ms-auto
+    ul.d-flex.align-items-center
+      li.nav-item.d-block.d-lg-none
+        a.nav-link.nav-icon.search-bar-toggle(href='#')
+          i.bi.bi-search
+      li.nav-item.dropdown.pe-3
+        a.nav-link.nav-profile.d-flex.align-items-center.pe-0(href='#' data-bs-toggle='dropdown')
+          img.rounded-circle(src='/img/profile-img.png' alt='profile')
+          span.d-none.d-md-block.dropdown-toggle.ps-2 #{user.firstname.charAt(0)}. #{user.lastname}
+        ul.dropdown-menu.dropdown-menu-end.dropdown-menu-arrow.profile
+          li.dropdown-header
+            h6 #{user.firstname} #{user.lastname}
+            span.small.text-opacity-50
+              | #{user.email}
+          li
+            hr.dropdown-divider
+          li
+            a.dropdown-item.d-flex.align-items-center(href='/profile')
+              i.bi.bi-person
+              span Profile
+          li
+            hr.dropdown-divider
+          li
+            a.dropdown-item.d-flex.align-items-center(href='/logout')
+              i.bi.bi-box-arrow-right
+              span Log out

@@ -1,0 +1,9 @@
+mixin form(method, action)
+  -httpMethod = method;
+  -notStandard = method !== 'get' && method !== 'post';
+  if notStandard
+      -httpMethod = 'post';
+  form.form-horizontal(method=httpMethod, action=action)&attributes(attributes)
+    if notStandard
+      input(type="hidden", name="__method", value=method)
+    block

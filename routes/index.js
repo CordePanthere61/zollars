@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const authService = require('../services/authenticationService')
-const {User, getUserWallets, getUserCard} = require("../models/User");
 const session = require('../utils/session')
 const twoFactor = require("../utils/twoFactor");
+const userBroker = require('../brokers/userBroker')
 
 // GET
 
@@ -12,8 +12,8 @@ router.get('/', session.middlewares.auth ,(req, res, next) => {
 });
 
 router.get('/wallets', session.middlewares.auth , async (req, res, next) => {
-    const queryWallet = await getUserWallets(req.session.user.email);
-    const queryCard = await getUserCard(req.session.user.email);
+    const queryWallet = await userBroker.getWallets(req.session.user.email);
+    const queryCard = await userBroker.getCard(req.session.user.email);
     console.log(queryWallet.wallets);
     res.render('app/wallets', {title: 'Wallets', wallets: queryWallet.wallets, card: queryCard.card});
 });
@@ -23,8 +23,8 @@ router.get('/transaction-history', session.middlewares.auth ,(req, res, next) =>
 });
 
 router.get('/profile', session.middlewares.auth , async (req, res, next) => {
-    const queryResult = await getUserCard(req.session.user.email);
-    res.render('app/profile', {title: 'Profile', card: queryResult.card});
+    const query = await userBroker.getCard(req.session.user.email);
+    res.render('app/profile', {title: 'Profile', card: query.card});
 });
 
 router.get('/register', session.middlewares.notAuth, (req, res, next) => {
@@ -37,7 +37,6 @@ router.get('/logout', session.middlewares.auth, (req, res, next) => {
 });
 
 router.get('/login', session.middlewares.notAuth ,async (req, res, next) => {
-    console.log(await User.find({}));
     req.session.destroy();
     res.render('authentication/login', {title: 'Log in'});
 });

@@ -61,21 +61,5 @@ function newUser(firstname, lastname, email, password, phone) {
     })
 }
 
-async function getUserWallets(email) {
-    return User.findOne({email: email}, 'wallets');
-}
-
-async function updateUserWallets(email, wallets) {
-    console.log('before update', wallets);
-    await User.findOneAndUpdate({email: email}, {wallets: wallets});
-}
-
-async function getUserCard(email) {
-    return User.findOne({email: email}, 'card');
-}
-
-exports.updateUserWallets = updateUserWallets
-exports.getUserCard = getUserCard
 exports.newUser = newUser
-exports.getUserWallets = getUserWallets
 exports.User = User

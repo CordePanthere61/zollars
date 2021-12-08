@@ -3,7 +3,6 @@ const {User} = require('../models/User')
 const Joi = require("joi");
 const Password = require("joi-password-complexity");
 const bcrypt = require("bcrypt");
-const {valid} = require("joi");
 
 async function validatePhoneConfirmation(req) {
     if (!twoFactor.validateCode(req.body.code)) {

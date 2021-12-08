@@ -28,7 +28,17 @@ router.post('/:symbol/buy', async (req, res) => {
         req.flash('errorMessages', walletsService.errorMessages);
     }
     res.redirect('/wallets');
-
 });
+
+router.post('/:symbol/sell', async (req, res) => {
+    if (await walletsService.sellCrypto(req.params.symbol, req)) {
+        req.flash('successMessages', walletsService.successMessages);
+    } else {
+        req.flash('errorMessages', walletsService.errorMessages);
+    }
+    res.redirect('/wallets');
+})
+
+
 
 module.exports = router

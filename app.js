@@ -6,8 +6,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const profileRouter = require('./routes/profile');
-const walletsRouter = require('./routes/wallets')
-const session = require('./utils/session')
+const walletsRouter = require('./routes/wallets');
+const session = require('./utils/session');
 const db = require("./utils/database");
 const flash = require('connect-flash');
 require('dotenv').config()

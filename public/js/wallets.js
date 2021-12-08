@@ -1,23 +1,25 @@
-let ethereumValue;
-let shibValue;
-let safemoonValue;
-
 $(document).ready(() =>  {
     setCryptosCurrentPrices();
 });
 
 function setCryptosCurrentPrices() {
     fetchCrypto('ethereum').then(r => {
-        ethereumValue = r.market_data.current_price.usd;
-        $('#ethMarketValue').html(r.market_data.current_price.usd + ' $')
+        let ethereumValue = r.market_data.current_price.usd;
+        setListenersForTransactionConverters('Eth', ethereumValue);
+        $('#ethMarketValue').html(ethereumValue + ' $');
+        $('#ethValueUSD').html((wallets[1].values.at(-1) * ethereumValue).toFixed(2) + ' $ (USD)');
     });
     fetchCrypto('shiba-inu').then(r => {
-        shibValue = r.market_data.current_price.usd;
-        $('#shibMarketValue').html(r.market_data.current_price.usd + ' $')
+        let shibValue = r.market_data.current_price.usd;
+        setListenersForTransactionConverters('Shib', shibValue);
+        $('#shibMarketValue').html(shibValue + ' $');
+        $('#shibValueUSD').html((wallets[2].values.at(-1) * shibValue).toFixed(2) + ' $ (USD)');
     });
     fetchCrypto('safemoon').then(r => {
-        safemoonValue = r.market_data.current_price.usd;
-        $('#safemoonMarketValue').html(r.market_data.current_price.usd + ' $')
+        let safemoonValue = r.market_data.current_price.usd;
+        setListenersForTransactionConverters('Safemoon', safemoonValue);
+        $('#safemoonMarketValue').html(safemoonValue + ' $');
+        $('#safemoonValueUSD').html((wallets[3].values.at(-1) * safemoonValue).toFixed(2) + ' $ (USD)');
     });
 }
 
@@ -29,4 +31,13 @@ async function fetchCrypto(name) {
     } catch (error) {
         console.log(error);
     }
+}
+
+function setListenersForTransactionConverters(symbol, valueUSD) {
+    $(`#buy${symbol}InputUSD`).on('change keyup',(e) => {
+        $(`#buy${symbol}Input`).val(Number(e.target.value) / valueUSD);
+    });
+    $(`#sell${symbol}Input`).on('change keyup',(e) => {
+        $(`#sell${symbol}InputUSD`).val(Number(e.target.value) * valueUSD + ' $');
+    });
 }

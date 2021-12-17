@@ -14,43 +14,60 @@ router.post('/confirm-phone', session.middlewares.auth, (req, res, next) => {
     res.redirect('/profile');
 });
 
-router.post('/confirm-phone/validate', session.middlewares.auth, async (req, res) => {
-    if (await profileService.validatePhoneConfirmation(req)) {
-        req.flash('successMessages', profileService.successMessages);
-    } else {
-        req.flash('errorMessages', profileService.errorMessages);
-    }
-    res.redirect('/profile');
+router.post('/confirm-phone/validate', session.middlewares.auth, (req, res) => {
+    profileService.validatePhoneConfirmation(req)
+        .then(success => {
+            req.flash('successMessages', success);
+            res.redirect('/profile');
+        })
+        .catch(error => {
+            req.flash('errorMessages', error);
+            res.redirect('/profile');
+        });
 });
 
-router.post('/two-factor/update', session.middlewares.auth, async (req, res) => {
-    await profileService.updateTwoFactor(req);
-    req.flash('successMessages', profileService.successMessages);
-    res.redirect('/profile');
-})
-
-router.post('/change-password', async (req, res) => {
-    if (await profileService.changePassword(req)) {
-        req.flash('successMessages', profileService.successMessages);
-    } else {
-        req.flash('errorMessages', profileService.errorMessages);
-    }
-    res.redirect('/profile');
+router.post('/two-factor/update', session.middlewares.auth, (req, res) => {
+    profileService.updateTwoFactor(req)
+        .then(msg => {
+            req.flash('successMessages', msg);
+            res.redirect('/profile');
+        });
 });
 
-router.post('/add-card', async (req, res) => {
-    if (await profileService.addCard(req)) {
-        req.flash('successMessages', profileService.successMessages);
-    } else {
-        req.flash('errorMessages', profileService.errorMessages);
-    }
-    res.redirect('/profile');
+router.post('/change-password', (req, res) => {
+    profileService.changePassword(req)
+        .then(success => {
+            req.flash('successMessages', success);
+            res.redirect('/profile');
+        })
+        .catch(error => {
+            req.flash('errorMessages', error);
+            res.redirect('/profile');
+        });
 });
 
-router.post('/remove-card', async (req, res) => {
-    await profileService.removeCard(req);
-    req.flash('successMessages', profileService.successMessages);
-    res.redirect('/profile');
+router.post('/add-card',  (req, res) => {
+    profileService.addCard(req)
+        .then(success => {
+            req.flash('successMessages', success);
+            res.redirect('/profile');
+        })
+        .catch(error => {
+            req.flash('errorMessages', error);
+            res.redirect('/profile');
+        });
+});
+
+router.post('/remove-card', (req, res) => {
+    profileService.removeCard(req)
+        .then(success => {
+            req.flash('successMessages', success);
+            res.redirect('/profile');
+        })
+        .catch(error => {
+            req.flash('errorMessages', error);
+            res.redirect('/profile');
+        });
 });
 
 module.exports = router

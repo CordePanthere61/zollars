@@ -1,0 +1,33 @@
+#profile-payment.tab-pane.fade.pt-3
+  form(action='/profile/add-card' method='POST')
+    h2.mb-3='Credit Card'
+    .row.mb-3
+      label.col-md-5.col-lg-4.col-form-label(for='card-name') Name on the card
+      .col-md-5.col-lg-4
+        input#card-name.form-control(name='cardName' type='text' readonly=!!(card.name) value=card.name ? card.name: '')
+    .row.mb-3
+      label.col-md-5.col-lg-4.col-form-label(for='card-number')
+        | Number&nbsp;
+        i(data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="16 numbers").bi.bi-info-circle
+      .col-md-5.col-lg-4
+        input#card-number.form-control(name='cardNumber' type='text' readonly=!!(card.number) value=card.number ? '**** **** **** ' + card.number.substring(12): '')
+    .row.mb-3
+      label.col-md-5.col-lg-4.col-form-label(for='card-expiration') Expiration Date
+      .col-md-2.col-lg-2
+        input#card-expiration.form-control(name='cardExpirationDate' type='text' placeholder='MM/YY' readonly=!!(card.expirationDate) value=card.expirationDate ? card.expirationDate: '')
+    .row.mb-3
+      label.col-md-5.col-lg-4.col-form-label(for='card-cvc') CVC
+      .col-md-2.col-lg-1
+        input#card-cvc.form-control(name='cardCvc' type='text' readonly=!!(card.cvc) value=card.cvc ? '***' : '')
+    if !card.name
+      .row.mb-3
+        .col-md-4
+        .col-md-4.d-flex.justify-content-end
+          button.btn.btn-warning.w-100(type='submit') Add card
+  if card.name
+    form(action='/profile/remove-card' method='POST')
+      .row.mb-3
+        .col-md-4
+        .col-md-4.d-flex.justify-content-end
+          button(type='submit').btn.btn-danger.w-100
+            | Remove card

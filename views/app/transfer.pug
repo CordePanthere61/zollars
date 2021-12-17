@@ -1,0 +1,44 @@
+extends ../includes/layouts/app-layout
+
+block content
+  .row.p-3
+    .col-lg
+      h2.text-white #{title}
+  .row
+    .col-lg-8
+      .card
+        .card-body.pt-3
+          form#form(action='/transfer/send' method='post')
+            .row.d-flex.align-items-start.p-3
+              label.col-form-label.col-lg-2
+                | Wallet :
+              .col-lg-3
+                select(name='wallet')#wallet.form-control
+                    each wallet, index in wallets
+                      if index !== 0
+                        option(value=index) #{wallet.name}
+            .row.d-flex.align-items-start.p-3
+              label.col-form-label.col-lg-2
+                | Exchange :
+              .col-lg-3
+                select(name='exchange')#exchange.form-control
+                    each exchange, index in exchanges
+                      option(value=exchange.id) #{exchange.name}
+            .row.d-flex.align-items-start.p-3
+              label.col-form-label.col-lg-2
+                | Amount :
+              .col-lg-6
+                input#amount.form-control(name='amount' type='text' value=wallets[1].values.at(-1))
+            .row.d-flex.align-items-start.p-3
+              label.col-form-label.col-lg-2
+                | Address :
+              .col-lg-6
+                input#address.form-control(name='address' type='text')
+            .row.d-flex.justify-content-end
+              .col-lg-2
+                button.btn.btn-warning.form-control(type='submit') Confirm
+block scripts
+  script.
+      var exchanges = !{JSON.stringify(exchanges)}
+      var wallets = !{JSON.stringify(wallets)}
+  script(src='/js/transfer.js')

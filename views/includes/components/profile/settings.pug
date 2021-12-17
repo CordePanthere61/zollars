@@ -1,0 +1,11 @@
+#profile-settings.tab-pane.fade.pt-3
+  form(action='/profile/two-factor/update' method='POST')
+    .row.mb-3
+      label.col-md-5.col-lg-4.col-form-label(for='twoFa') Two-Factor Authentication
+      .col-md-8.d-flex.align-center
+        .form-check.p-2
+          input#twoFa.form-check-input(type='checkbox' name='twoFa' checked=user.twoFaEnabled)
+          label.form-check-label(for='twoFa')
+            | Phone
+    .text-center
+      button.btn.btn-warning(type='submit') Save Changes

@@ -1,30 +1,7 @@
-const mongoose = require('mongoose');
+const crypto = require('crypto');
 
-const User = mongoose.model('User', new mongoose.Schema({
-    firstname: String,
-    lastname: String,
-    email: String,
-    password: String,
-    phone: String,
-    twoFaEnabled: { type: Boolean, default: false },
-    phoneConfirmed: { type: Boolean, default: false },
-    card: {
-        name: String,
-        number: String,
-        expirationDate: String,
-        cvc: String,
-    },
-    wallets: [
-        {
-            name: String,
-            symbol: String,
-            values: Array
-        }
-    ]
-}));
-
-function newUser(firstname, lastname, email, password, phone) {
-    return new User({
+function User(firstname, lastname, email, password, phone) {
+    return {
         firstname: firstname,
         lastname: lastname,
         email: email,
@@ -45,21 +22,23 @@ function newUser(firstname, lastname, email, password, phone) {
             {
                 name: 'Etherum',
                 symbol: 'ETH',
+                address: 'eth' + crypto.randomBytes(32).toString('hex'),
                 values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             },
             {
                 name: 'Shiba Inu',
                 symbol: 'SHIB',
+                address: 'shib' + crypto.randomBytes(31).toString('hex'),
                 values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             },
             {
                 name: 'SafeMoon',
                 symbol: 'SAFEMOON',
+                address: 'safemoon' + crypto.randomBytes(27).toString('hex'),
                 values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             },
         ],
-    })
+        transactionHistory: [],
+    };
 }
-
-exports.newUser = newUser
 exports.User = User

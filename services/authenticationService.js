@@ -1,73 +1,90 @@
-const {User, newUser} = require("../models/User");
-const bcrypt = require('bcrypt')
+const {User} = require("../models/User");
+const userBroker = require('../brokers/userBroker');
+const bcrypt = require('bcrypt');
 const Joi = require("joi");
 const Password = require("joi-password-complexity");
-const twoFactor = require('../utils/twoFactor')
+const twoFactor = require('../utils/twoFactor');
 
 const oneMonth = 2629800000;
 
-async function login(req) {
-    const {error} = validateLoginForm(req.body);
-    if (error) {
-        exports.errorMessages = error.details;
-        return null;
-    }
-    let user = await User.findOne({email: req.body.email});
-    if (!user) {
-        exports.errorMessages = ['Email or password incorrect.'];
-        return null;
-    }
-    const validPassword = await bcrypt.compare(req.body.password + process.env.PASSWORD_PEPPER, user.password);
-    if (!validPassword) {
-        exports.errorMessages = ['Email or password incorrect.'];
-        return null;
-    }
-    if (req.body.remember_me) {
-        req.session.cookie.maxAge = oneMonth;
-    }
-    return user;
+function login(req) {
+    return new Promise((resolve, reject) => {
+        const {error} = validateLoginForm(req.body);
+        if (error) {
+            return reject(error.details);
+        }
+        userBroker.findOne(req.body.email)
+            .then(user => {
+                bcrypt.compare(req.body.password + process.env.PASSWORD_PEPPER, user.password).then(result => {
+                    if (!result) {
+                        reject(['Email or password incorrect.']);
+                    }
+                    if (req.body.remember_me) {
+                        req.session.cookie.maxAge = oneMonth;
+                    }
+                    resolve(user);
+                });
+            }).catch(() => {
+                reject(['Email or password incorrect.']);
+            });
+    });
 }
 
-async function register(req) {
-    const {error} = validateRegisterForm(req.body);
-    if (error) {
-        exports.errorMessages = error.details
-        return null;
-    }
-    let user = await User.findOne({email: req.body.email});
-    if (user) {
-        exports.errorMessages = 'Email already in use.';
-        return null;
-    }
-    const salt = await bcrypt.genSalt(10);
-    const password = await bcrypt.hash(req.body.password + process.env.PASSWORD_PEPPER, salt);
-    user = newUser(req.body.firstname, req.body.lastname, req.body.email, password, req.body.phone);
-    await user.save();
-    exports.successMessages = ['User successfully created.'];
-    return user;
+function register(req) {
+    debugger;
+    return new Promise((resolve, reject) => {
+        const {error} = validateRegisterForm(req.body);
+        if (error) {
+            return reject(error.details);
+        }
+        userBroker.findOne(req.body.email)
+            .then(() => {
+                return reject('Email already in use.');
+            })
+            .catch(async() => {
+                const salt = await bcrypt.genSalt(10);
+                const password = await bcrypt.hash(req.body.password + process.env.PASSWORD_PEPPER, salt);
+                userBroker.insertNewUser(new User(
+                    req.body.firstname,
+                    req.body.lastname,
+                    req.body.email,
+                    password,
+                    req.body.phone)).then(() => {
+                    resolve('User successfully created.');
+                });
+            });
+    });
 }
 
-async function loginWithTwoFactor(req) {
-    if (!twoFactor.validateCode(req.body.code)) {
-        twoFactor.sendLoginCode(req.session.user);
-        return false;
-    }
-    await logUser(req, req.session.user.email);
-    return true;
+function loginWithTwoFactor(req) {
+    return new Promise((resolve, reject) => {
+        if (!twoFactor.validateCode(req.body.code)) {
+            twoFactor.sendLoginCode(req.session.user);
+            return reject('Invalide code.');
+        }
+        logUser(req, req.session.user.email).then(() => {
+            resolve();
+        });
+    });
 }
 
-async function logUser(req, email) {
-    let user = await User.findOne({email: email});
-    req.session.isLogged = true;
-    req.session.user = {
-        id: user._id,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        email: user.email,
-        phone: user.phone,
-        hasTwoFa: user.twoFaEnabled,
-        phoneConfirmed: user.phoneConfirmed
-    }
+function logUser(req, email) {
+    return new Promise(resolve => {
+        userBroker.findOne(email)
+            .then(user => {
+                req.session.isLogged = true;
+                req.session.user = {
+                    id: user._id,
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    email: user.email,
+                    phone: user.phone,
+                    twoFaEnabled: user.twoFaEnabled,
+                    phoneConfirmed: user.phoneConfirmed
+                }
+                resolve();
+            });
+    });
 }
 
 exports.logUser = logUser

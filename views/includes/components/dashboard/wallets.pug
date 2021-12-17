@@ -1,0 +1,58 @@
+.card
+  .card-body.pb-0
+    h5.card-title.color-text
+      | Wallets&nbsp;
+      span
+        a(href='/wallets') | &nbsp;See more
+    if wallets[1].values.at(-1) === 0 && wallets[2].values.at(-1) === 0 && wallets[3].values.at(-1) === 0
+        .pb-4
+          | No money yet.
+    else
+      #walletChart.echart.color-text(style='min-height: 277px;')
+      script.
+        var wallets = !{JSON.stringify(wallets)}
+        var marketValues = !{JSON.stringify(marketValues)}
+        document.addEventListener("DOMContentLoaded", () => {
+          echarts.init(document.querySelector("#walletChart")).setOption({
+            tooltip: {
+              trigger: 'item'
+            },
+            legend: {
+              orient: 'horizontal',
+            },
+            series: [
+              {
+                name: 'Portefeuille',
+                type: 'pie',
+                radius: '50%',
+                data: [
+                {
+                  value: (wallets[1].values.at(-1) * marketValues.ethereum).toFixed(2),
+                  name: 'ETH'
+                },
+                {
+                  value: (wallets[2].values.at(-1) * marketValues.shiba).toFixed(2),
+                  name: 'SHIB'
+                },
+                {
+                  value: (wallets[3].values.at(-1) * marketValues.safemoon).toFixed(2),
+                  name: 'SAFEMOON'
+                }],
+                emphasis: {
+                  itemStyle: {
+                    color: '#FAFAFA',
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(255, 255, 255, 0.5)'
+                  }
+                }
+              }],
+              options: {
+                legend: {
+                    labels: {
+                        fontColor: 'white'
+                    }
+                }
+              }
+          });
+        });

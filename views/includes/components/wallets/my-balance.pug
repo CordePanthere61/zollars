@@ -1,0 +1,48 @@
+#myBalance.tab-pane.fade.show.active
+  .row.p-5
+    .col-lg-12.d-flex.justify-content-start.align-items-center
+      img(src='img/wallet-icons/USD.png')
+      h2.p-2=wallets[0].name
+        span.text-muted &nbsp;(#{wallets[0].symbol})
+  .row.p-5
+    .col-lg-6
+      .price=wallets[0].values.at(-1).toFixed(2) + ' $'
+    .col-lg-6.d-flex.justify-content-around.flex-column.align-items-center
+      if !card.name
+        a(href='/profile').d-inline-block.small
+          | Please add a credit card before adding or withdrawing funds.
+      else
+        button(type='button' data-bs-toggle='modal' data-bs-target='#addFundsModal').btn.btn-warning.text-black.p-3.w-75
+          | Add funds
+        #addFundsModal.modal.fade(tabindex='-1' style='display: none;' aria-hidden='true')
+          .modal-dialog.modal-dialog-centered
+            .modal-content
+              form(action='/wallets/my-balance/add-funds' method='POST')
+                .modal-header
+                  | Add funds
+                .modal-body
+                  .row.mb-3
+                    label.col-md-6.col-lg-5.col-form-label Amount (USD)
+                    .col-md-6.col-lg-5
+                      input.form-control(name='amount' type='text')
+                .modal-footer
+                  button(type='button' data-bs-dismiss='modal').btn.btn-warning Cancel
+                  button(type='sumbit').btn.btn-warning Confirm
+        button(disabled=!wallets[0].values.at(-1) data-bs-toggle='modal' data-bs-target='#withdrawModal').btn.btn-warning.text-black.p-3.w-75
+          | Withdraw
+        #withdrawModal.modal.fade(tabindex='-1' style='display: none;' aria-hidden='true')
+          .modal-dialog.modal-dialog-centered
+            .modal-content
+              form(action='/wallets/my-balance/withdraw' method='POST')
+                .modal-header
+                  | Withdraw
+                .modal-body
+                  .row.mb-3
+                    label.col-md-6.col-lg-5.col-form-label Amount (USD)
+                    .col-md-6.col-lg-5
+                      input.form-control(name='amount' type='text')
+                .modal-footer
+                  button(type='button' data-bs-dismiss='modal').btn.btn-warning Cancel
+                  button(type='sumbit').btn.btn-warning Confirm
+  .row
+    #myBalanceChart.echart(style='min-height: 400px;')

@@ -2,11 +2,9 @@ extends ../includes/layouts/auth-layout
 
 block content
   .p-3.text-center
-    if errors != null
+    if error != null
       .alert.alert-danger
-          each error in errors
-            | - #{error.message}
-            br
+        | - #{error}
     h5.card-title.fs-4.color-text-accent Two-Factor Authentication
     span.small
       | A code has been sent to :&nbsp;

@@ -28,6 +28,10 @@ body {
     background: var(--background-color-accent) !important;
 }
 
+.background-accent-light {
+    background: var(--background-color-accent-light) !important;
+}
+
 .background-app {
     background: var(--background-color-app) !important;
 }

@@ -6,7 +6,6 @@ block content
       .col-lg
         .card
           .card-body.pt-3
-            // Bordered Tabs
             ul.nav.nav-tabs.nav-tabs-bordered
               li.nav-item
                 button.nav-link.active(data-bs-toggle='tab' data-bs-target='#profile-overview') Overview
@@ -18,93 +17,8 @@ block content
               li.nav-item
                 button.nav-link(data-bs-toggle='tab' data-bs-target='#profile-change-password') Change Password
             .tab-content.pt-2
-              #profile-overview.tab-pane.fade.show.active
-                .row.profile-overview.p-4
-                  .col-lg-3.text-center
-                    img.rounded-circle.profile-img(src='img/profile-img.png' alt='profile')
-                  .col-lg-9
-                    h5.card-title Profile Details
-                    .row
-                      .col-lg-3.col-md-4.label Full Name
-                      .col-lg-9.col-md-8 #{user.firstname} #{user.lastname}
-                    .row
-                      .col-lg-3.col-md-4.label Phone
-                      .col-lg-9.col-md-8
-                        if user.phone.length === 11
-                          | +#{user.phone.charAt(0)} (#{user.phone.substring(1,4)}) #{user.phone.substring(4,7)}-#{user.phone.substring(7)}
-                        else
-                          | (#{user.phone.substring(0,3)}) #{user.phone.substring(3,6)}-#{user.phone.substring(6)}
-                    if !user.phoneConfirmed
-                      .row
-                        .col-lg-3.col-md-4.label
-                        .col-lg-9.col-md-8
-                          form(action='/profile/confirm-phone' method='POST')
-                            button(type='submit').btn.btn-warning
-                              | Confirm phone
-                    .row
-                      .col-lg-3.col-md-4.label Email
-                      .col-lg-9.col-md-8 #{user.email}
+              include ../includes/components/profile/overview
               if user.phoneConfirmed
-                #profile-settings.tab-pane.fade.pt-3
-                  // Settings Form
-                  form(action='/profile/two-factor/update' method='POST')
-                    .row.mb-3
-                      label.col-md-4.col-lg-3.col-form-label(for='twoFa') Two-Factor Authentication
-                      .col-md-8.d-flex.align-center
-                        .form-check.p-2
-                          input#twoFa.form-check-input(type='checkbox' name='twoFa' checked=user.hasTwoFa)
-                          label.form-check-label(for='twoFa')
-                            | Phone
-                    .text-center
-                      button.btn.btn-warning(type='submit') Save Changes
-                  // End settings Form
-              #profile-payment.tab-pane.fade.pt-3
-                form(action='/profile/add-card' method='POST')
-                  h2.mb-3='Credit Card'
-                  .row.mb-3
-                    label.col-md-4.col-lg-3.col-form-label(for='card-name') Name on the card
-                    .col-md-4.col-lg-3
-                      input#card-name.form-control(name='cardName' type='text' readonly=!!(card.name) value=card.name ? card.name: '')
-                  .row.mb-3
-                    label.col-md-4.col-lg-3.col-form-label(for='card-number')
-                      | Number&nbsp;
-                      i(data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="16 numbers").bi.bi-info-circle
-                    .col-md-4.col-lg-3
-                      input#card-number.form-control(name='cardNumber' type='text' readonly=!!(card.number) value=card.number ? '**** **** **** ' + card.number.substring(12): '')
-                  .row.mb-3
-                    label.col-md-4.col-lg-3.col-form-label(for='card-expiration') Expiration Date
-                    .col-md-2.col-lg-1
-                      input#card-expiration.form-control(name='cardExpirationDate' type='text' placeholder='MM/YY' readonly=!!(card.expirationDate) value=card.expirationDate ? card.expirationDate: '')
-                  .row.mb-3
-                    label.col-md-4.col-lg-3.col-form-label(for='card-cvc') CVC
-                    .col-md-2.col-lg-1
-                      input#card-cvc.form-control(name='cardCvc' type='text' readonly=!!(card.cvc) value=card.cvc ? '***' : '')
-                  if !card.name
-                    .row.mb-3
-                      .col-md-3
-                      .col-md-3.d-flex.justify-content-end
-                        button.btn.btn-warning.w-100(type='submit') Add card
-                if card.name
-                  form(action='/profile/remove-card' method='POST')
-                    .row.mb-3
-                      .col-md-3
-                      .col-md-3.d-flex.justify-content-end
-                          button(type='submit').btn.btn-danger.w-100
-                            | Remove card
-
-              #profile-change-password.tab-pane.fade.pt-3
-                // Change Password Form
-                form(action='/profile/change-password' method='POST')
-                  .row.mb-3
-                    label.col-md-4.col-lg-3.col-form-label(for='password') Current Password
-                    .col-md-4.col-lg-3
-                      input#password.form-control(name='password' type='password')
-                  .row.mb-3
-                    label.col-md-4.col-lg-3.col-form-label(for='newPassword') New Password
-                    .col-md-4.col-lg-3
-                      input#newPassword.form-control(name='newPassword' type='password')
-                  .row.mb-3
-                    .col-md-8.col-lg-6.d-flex.justify-content-end
-                      button.btn.btn-warning(type='submit') Change Password
-                // End Change Password Form
-            // End Bordered Tabs
+                include ../includes/components/profile/settings
+              include ../includes/components/profile/payment
+              include ../includes/components/profile/change-password

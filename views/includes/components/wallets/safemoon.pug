@@ -1,0 +1,59 @@
+#safeMoon.tab-pane.fade.show
+  .row.p-5
+    .col-lg-12.d-flex.justify-content-start.align-items-center
+      img(src='img/wallet-icons/SAFEMOON.png')
+      h2.p-2 SafeMoon
+        span.text-muted &nbsp;(#{wallets[3].symbol})
+      h3#safemoonMarketValue.text-muted
+  .row.px-5
+    .col-lg-12
+      span.text-muted
+        | Address : &nbsp;
+        | #{wallets[3].address}
+  .row.p-5
+    .col-lg-6
+      .price=(wallets[3].values.at(-1) === 0) ? "0.00" : wallets[3].values.at(-1)
+        span#safemoonValueUSD.text-muted.small
+    .col-lg-6.d-flex.justify-content-around.flex-column
+      button(disabled=wallets[0].values.at(-1) <= 0 data-bs-toggle='modal' data-bs-target='#buySafemoonModal').btn.btn-warning.text-black.p-3.w-75
+        | Buy
+      button(disabled=wallets[3].values.at(-1) <= 0 data-bs-toggle='modal' data-bs-target='#sellSafemoonModal').btn.btn-warning.text-black.p-3.w-75
+        | Sell
+      #buySafemoonModal.modal.fade(tabindex='-1' style='display: none;' aria-hidden='true')
+        .modal-dialog.modal-dialog-centered
+          .modal-content
+            form(action='/wallets/SAFEMOON/buy' method='POST')
+              .modal-header
+                | Buy SafeMoon
+              .modal-body
+                .row.mb-3
+                  label.col-md-6.col-lg-5.col-form-label Amount (USD)
+                  .col-md-6.col-lg-5
+                    input#buySafemoonInputUSD.form-control(name='amount' type='text')
+                .row.mb-3
+                  label.col-md-6.col-lg-5.col-form-label Amount (SAFEMOON)
+                  .col-md-6.col-lg-5
+                    input#buySafemoonInput.form-control.bg-secondary(readonly=true type='text')
+              .modal-footer
+                button(type='button' data-bs-dismiss='modal').btn.btn-warning Cancel
+                button(type='sumbit').btn.btn-warning Confirm
+      #sellSafemoonModal.modal.fade(tabindex='-1' style='display: none;' aria-hidden='true')
+        .modal-dialog.modal-dialog-centered
+          .modal-content
+            form(action='/wallets/SAFEMOON/sell' method='POST')
+              .modal-header
+                | Sell SafeMoon
+              .modal-body
+                .row.mb-3
+                  label.col-md-6.col-lg-5.col-form-label Amount (SAFEMOON)
+                  .col-md-6.col-lg-5
+                    input#sellSafemoonInput.form-control(name='amount' type='text')
+                .row.mb-3
+                  label.col-md-6.col-lg-5.col-form-label Amount (USD)
+                  .col-md-6.col-lg-5
+                    input#sellSafemoonInputUSD.form-control.bg-secondary(readonly=true type='text')
+              .modal-footer
+                button(type='button' data-bs-dismiss='modal').btn.btn-warning Cancel
+                button(type='sumbit').btn.btn-warning Confirm
+  .row
+    #safemoonChart.echart(style='min-height: 400px;')
